@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="bar"><div class="wordmark" aria-label="CrespoQA">Crespo<span>QA</span></div></header>
+<main class="narrow">
+  <h1>Sign in</h1>
+  <div id="error" class="alert" role="alert" hidden></div>
+  <form id="login" class="stack">
+    <label>Username <input id="u" type="text" autocomplete="username" required autofocus></label>
+    <label>Password <input id="p" type="password" autocomplete="current-password" required></label>
+    <button class="primary" type="submit">Sign in</button>
+  </form>
+</main>
+<script src="/static/common.js"></script>
+<script src="/static/login.js"></script>
+</body>
+</html>

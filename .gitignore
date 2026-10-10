@@ -1,0 +1,16 @@
+# local environment and data
+.venv/
+.env
+data/
+logs/
+*.db
+__pycache__/
+*.pyc
+.pytest_cache/
+# anything derived from real reports
+*.docx
+qa_output/
+out_*/
+inspect_output*
+# documentation stays local
+docs/

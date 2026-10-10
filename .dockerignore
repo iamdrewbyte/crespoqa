@@ -1,0 +1,15 @@
+.venv
+.git
+**/__pycache__
+**/*.pyc
+.env
+data
+logs
+qa_output
+out_*
+*.docx
+*.db
+inspect_output*
+docs
+tests
+deploy/transfer.sh

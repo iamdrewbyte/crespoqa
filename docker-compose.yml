@@ -1,0 +1,63 @@
+# One command: ./start.sh   (or:  docker compose up -d --build)
+# Three containers: the app, the AI model server (Ollama), and a one-shot job that downloads the model (~4.7 GB, first run only).
+name: crespoqa
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    # GPU (NVIDIA + nvidia-container-toolkit): uncomment to make reviews take seconds instead of a minute
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  model-pull:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      MODEL: ${AI_MODEL:-qwen2.5:7b-instruct}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - 'ollama list | grep -q "^$$MODEL" && echo "model $$MODEL already present" || ollama pull "$$MODEL"'
+    restart: "no"
+
+  app:
+    build: .
+    image: crespoqa:latest
+    restart: unless-stopped
+    depends_on:
+      model-pull:
+        condition: service_completed_successfully
+    ports:
+      - "${CRESPOQA_PUBLISH:-127.0.0.1}:${CRESPOQA_PORT:-8000}:8000"
+    environment:
+      CRESPOQA_AUTH: ${CRESPOQA_AUTH:-off}
+      CRESPOQA_ADMIN_USER: ${CRESPOQA_ADMIN_USER:-}
+      CRESPOQA_ADMIN_PASSWORD: ${CRESPOQA_ADMIN_PASSWORD:-}
+      CRESPOQA_COOKIE_SECURE: ${CRESPOQA_COOKIE_SECURE:-false}
+      CRESPOQA_MAX_FILE_MB: ${CRESPOQA_MAX_FILE_MB:-50}
+      CRESPOQA_TTL_MINUTES: ${CRESPOQA_TTL_MINUTES:-30}
+      AI_ENABLED: "true"
+      AI_BASE_URL: http://ollama:11434/v1
+      AI_MODEL: ${AI_MODEL:-qwen2.5:7b-instruct}
+      AI_TIMEOUT_S: ${AI_TIMEOUT_S:-300}
+    volumes:
+      - appdata:/data
+
+volumes:
+  ollama:
+  appdata:

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Templates</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="bar">
+  <div class="wordmark" aria-label="CrespoQA">Crespo<span>QA</span></div>
+  <nav aria-label="Main"></nav>
+</header>
+<main class="wide">
+  <div id="error" class="alert" role="alert" hidden></div>
+  <div id="note" class="ok-msg" role="status" hidden></div>
+
+  <section id="list-view" aria-labelledby="h-list">
+    <div class="tools">
+      <h1 id="h-list">Templates</h1>
+      <button id="new" class="primary" type="button" hidden>New template</button>
+    </div>
+    <p class="muted">Each template is a short list of steps for one service and report type. Every save makes a new version, and each processed report records the version it used.</p>
+    <div id="cards"></div>
+  </section>
+
+  <section id="edit-view" hidden aria-labelledby="h-edit">
+    <div class="tools"><h1 id="h-edit">Edit template</h1><button id="back" class="ghost" type="button">Back to list</button></div>
+    <div class="grid3">
+      <label>Template name <input id="t-name" type="text" maxlength="100"></label>
+      <label>Service <input id="t-service" type="text" maxlength="40" placeholder="e.g. PCI"></label>
+      <label>Report type <select id="t-type"><option value="technical">Technical</option><option value="executive">Executive</option></select></label>
+      <label>Version <select id="t-versions"></select></label>
+    </div>
+    <div class="split2">
+      <div class="box">
+        <div class="tools"><h2>Template text</h2><button id="help-toggle" class="small ghost" type="button">Show help</button></div>
+        <pre id="help" class="help" hidden></pre>
+        <textarea id="t-text" class="notepad" spellcheck="false" aria-label="Template text, one step per line"></textarea>
+        <div id="line-error" class="alert" role="alert" hidden></div>
+        <button id="save" class="primary" type="button">Save</button>
+      </div>
+      <aside class="box plain" aria-live="polite" aria-labelledby="h-plain">
+        <h2 id="h-plain">What this will do</h2>
+        <ol id="plain"></ol>
+      </aside>
+    </div>
+  </section>
+</main>
+<script src="/static/common.js"></script>
+<script src="/static/templates.js"></script>
+</body>
+</html>

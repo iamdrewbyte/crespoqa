@@ -1,0 +1,26 @@
+[Unit]
+Description=CrespoQA report QA service
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=crespoqa
+Group=crespoqa
+WorkingDirectory=/opt/crespoqa
+EnvironmentFile=/etc/crespoqa/crespoqa.env
+ExecStart=/opt/crespoqa/.venv/bin/python -m crespoqa.api.app
+Restart=on-failure
+RestartSec=5
+# Hardening: the service only needs its own folders
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/crespoqa /var/log/crespoqa
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+lxml>=5.0
+pydantic>=2.6
+python-docx>=1.1        # test fixtures only; the pipeline edits XML directly
+pytest>=8.0             # tests
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+httpx>=0.27             # tests (TestClient)
